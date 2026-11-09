@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="es-CO" class="h-full bg-slate-50 text-slate-800">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEÑAS EN MISIÓN: El viaje de Lucas (LSC)</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Nunito', 'sans-serif'],
+                        kids: ['Fredoka', 'cursive'],
+                    },
+                    colors: {
+                        pastel: {
+                            blue: '#e0f2fe',
+                            green: '#dcfce7',
+                            yellow: '#fef9c3',
+                            pink: '#fce7f3',
+                            purple: '#f3e8ff',
+                            orange: '#ffedd5',
+                            card: '#ffffff'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .perspective-1000 { perspective: 1000px; }
+        .transform-style-3d { transform-style: preserve-3d; }
+        .backface-hidden { backface-visibility: hidden; }
+        .rotate-y-180 { transform: rotateY(180deg); }
+
+        .pastel-shadow {
+            box-shadow: 0 10px 25px -5px rgba(56, 189, 248, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+        }
+        .btn-bounce:active {
+            transform: translateY(2px);
+        }
+    </style>
+</head>
+<body class="h-full flex flex-col font-sans antialiased bg-sky-50/50 text-slate-800 select-none overflow-x-hidden">
+
+    <!-- HEADER / BARRA SUPERIOR -->
+    <header class="w-full bg-white/95 backdrop-blur-md border-b-2 border-sky-100 px-4 py-3 sticky top-0 z-50 shadow-sm">
+        <div class="max-w-5xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-2xl bg-sky-400 text-white flex items-center justify-center font-kids font-bold text-xl shadow-md">
+                    🖐️
+                </div>
+                <div>
+                    <h1 class="font-kids text-lg sm:text-2xl font-bold text-sky-600 flex items-center gap-2">
+                        SEÑAS EN MISIÓN <span class="text-xs px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-700 font-sans font-bold border border-amber-200">El Viaje de Lucas</span>
+                    </h1>
+                    <p class="text-xs text-slate-500 font-bold hidden sm:block">Aprende Lengua de Señas Colombiana (LSC) Jugando</p>
+                </div>
+            </div>
+
+            <!-- CONTROLES SUPERIORES -->
+            <div class="flex items-center gap-2">
+                <button onclick="toggleAudio()" id="btnAudio" class="p-2.5 rounded-2xl bg-sky-50 text-sky-600 border border-sky-200 hover:bg-sky-100 transition" title="Sonido">
+                    <i data-lucide="volume-2" class="w-5 h-5"></i>
+                </button>
+                <button onclick="openLabModal()" class="px-3.5 py-2 bg-emerald-400 hover:bg-emerald-500 text-white font-kids font-bold text-xs sm:text-sm rounded-2xl transition flex items-center gap-2 shadow-sm btn-bounce">
+                    <i data-lucide="book-open" class="w-4 h-4"></i>
+                    <span class="hidden sm:inline">Diccionario LSC</span>
+                </button>
+                <button onclick="restartGame()" class="p-2.5 text-slate-400 hover:text-rose-500 rounded-2xl hover:bg-rose-50 transition" title="Reiniciar">
+                    <i data-lucide="rotate-ccw" class="w-5 h-5"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- BARRA DE PROGRESO DE LA AVENTURA -->
+    <div class="w-full bg-white border-b border-sky-100 py-2 px-4">
+        <div class="max-w-4xl mx-auto flex items-center justify-between text-xs font-kids font-bold text-slate-500">
+            <span id="progressStepLabel">Progreso: Capítulo 1</span>
+            <div class="w-48 sm:w-64 bg-slate-100 h-2.5 rounded-full overflow-hidden border border-slate-200">
+                <div id="progressBarFill" class="bg-sky-400 h-full w-[10%] transition-all duration-500"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONTENEDOR PRINCIPAL -->
+    <main class="flex-1 max-w-4xl w-full mx-auto p-4 flex flex-col justify-center items-center">
+
+        <!-- 1. INTRODUCCIÓN GENERAL -->
+        <section id="screenIntro" class="w-full flex flex-col items-center space-y-6 py-4">
+            <div class="w-full bg-white border-2 border-sky-100 rounded-3xl p-6 sm:p-8 pastel-shadow space-y-6">
+                
+                <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+                    <span class="px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full font-kids font-bold text-xs">
+                        🌱 Módulo Didáctico LSC
+                    </span>
+                    <span class="text-xs text-slate-400 font-bold">5 Capítulos + 3 Fases de Entrenamiento</span>
+                </div>
+
+                <div class="text-center sm:text-left">
+                    <h2 class="font-kids text-2xl sm:text-3xl font-extrabold text-sky-600 mb-2">
+                        ¿Qué es la Lengua de Señas Colombiana (LSC)? 🇨🇴
+                    </h2>
+                    <p class="text-slate-600 text-sm font-semibold leading-relaxed">
+                        Es la lengua natural con la que se comunica la comunidad Sorda en Colombia. No utiliza sonidos hablados, sino una gramática visual estructurada mediante <strong>postura de manos, movimiento, ubicación y expresión facial</strong>.
+                    </p>
+                </div>
+
+                <!-- CONCEPTOS CLAVE -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="bg-pastel-blue/60 p-4 rounded-2xl border border-sky-200">
+                        <div class="flex items-center gap-2 text-sky-700 font-kids font-bold text-sm mb-1">
+                            <i data-lucide="hand" class="w-4 h-4"></i> ¿Cómo se realiza una seña?
+                        </div>
+                        <p class="text-xs text-slate-600 font-semibold leading-relaxed">
+                            Combina la configuración de los dedos, la dirección de la palma, el punto exacto del cuerpo y la articulación de la mirada y el rostro.
+                        </p>
+                    </div>
+
+                    <div class="bg-pastel-green/60 p-4 rounded-2xl border border-emerald-200">
+                        <div class="flex items-center gap-2 text-emerald-700 font-kids font-bold text-sm mb-1">
+                            <i data-lucide="heart" class="w-4 h-4"></i> ¿Por qué es importante?
+                        </div>
+                        <p class="text-xs text-slate-600 font-semibold leading-relaxed">
+                            Garantiza la autonomía, inclusión y respeto hacia la cultura Sorda en entornos escolares, urbanos y sociales.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- LA MISIÓN DE LUCAS -->
+                <div class="bg-amber-50 p-5 rounded-2xl border-2 border-amber-200/70 space-y-2">
+                    <h3 class="font-kids font-bold text-amber-800 text-base flex items-center gap-2">
+                        <i data-lucide="map-pin" class="w-5 h-5 text-amber-600"></i> La Historia de Lucas en la Ciudad
+                    </h3>
+                    <p class="text-xs sm:text-sm text-slate-700 font-semibold leading-relaxed">
+                        Lucas (10 años) se ha distanciado de su grupo escolar en el centro histórico. Para encontrar la ruta a casa, deberá comunicarse con los ciudadanos en Lengua de Señas Colombiana. A medida que avance la historia, aprenderás <strong>Saludos, Pronombres y Fórmulas de Cortesía</strong> en mini-juegos intercalados.
+                    </p>
+                </div>
+
+                <button onclick="startChapter(1)" class="w-full py-4 bg-emerald-400 hover:bg-emerald-500 text-white font-kids font-extrabold text-lg sm:text-xl rounded-2xl transition shadow-md hover:shadow-lg flex items-center justify-center gap-3 btn-bounce">
+                    <i data-lucide="play-circle" class="w-6 h-6"></i> ¡INICIAR CAPÍTULO 1 Y APRENDER SEÑAS!
+                </button>
+            </div>
+        </section>
+
+        <!-- 2. PANTALLA: CAPÍTULO NARRATIVO (1 al 5) -->
+        <section id="screenChapter" class="w-full hidden flex-col space-y-4">
+            <div class="bg-white p-4 rounded-3xl border-2 border-sky-100 flex justify-between items-center pastel-shadow">
+                <div>
+                    <span id="chapBadge" class="text-xs font-kids font-bold text-amber-500 uppercase tracking-wider">Capítulo 1 de 5</span>
+                    <h2 id="chapTitle" class="text-lg font-kids font-extrabold text-sky-600">El Extravío en la Ciudad</h2>
+                </div>
+                <span id="chapTag" class="text-xs font-kids font-extrabold text-sky-700 bg-sky-100 px-3 py-1 rounded-full border border-sky-200">
+                    Narrativa Interactiva
+                </span>
+            </div>
+
+            <!-- ESCENA Y ELECCIONES -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Imagen Ilustrativa de la Escena -->
+                <div class="bg-white border-2 border-sky-100 rounded-3xl p-4 flex flex-col items-center justify-center min-h-[250px] pastel-shadow relative">
+                    <div id="chapImageSVG" class="w-full h-56 flex items-center justify-center">
+                        <!-- SVG de la escena -->
+                    </div>
+                </div>
+
+                <!-- Historia y 3 Opciones de Elección -->
+                <div class="bg-white border-2 border-sky-100 rounded-3xl p-6 flex flex-col justify-between space-y-4 pastel-shadow">
+                    <div>
+                        <p id="chapStoryText" class="text-xs sm:text-sm font-semibold text-slate-700 leading-relaxed mb-4">
+                            Texto de la escena...
+                        </p>
+                    </div>
+
+                    <!-- 3 OPCIONES POR CAPÍTULO -->
+                    <div id="chapOptionsContainer" class="space-y-2.5">
+                        <!-- Opciones dinámicas -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. PANTALLA: FASE DE ENTRENAMIENTO LSC (INTERCALADA) -->
+        <section id="screenTraining" class="w-full hidden flex-col space-y-4">
+            <div class="bg-white p-4 rounded-3xl border-2 border-sky-100 flex flex-col sm:flex-row justify-between items-center gap-3 pastel-shadow">
+                <div>
+                    <span id="trainingModuleBadge" class="text-xs font-kids font-bold text-pink-500 uppercase tracking-wider">Módulo de Aprendizaje 1</span>
+                    <h2 id="trainingModuleTitle" class="text-lg sm:text-xl font-kids font-extrabold text-sky-600 flex items-center gap-2">
+                        <i data-lucide="sparkles" class="w-5 h-5 text-yellow-500"></i> Mini-Juego: Saludos Básicos
+                    </h2>
+                    <p class="text-xs text-slate-500 font-bold">Empareja la <strong class="text-sky-600">Fotografía Fotorrealista</strong> con la <strong class="text-pink-600">Descripción del Movimiento</strong></p>
+                </div>
+            </div>
+
+            <!-- ESTADÍSTICAS DEL MINI-JUEGO -->
+            <div class="grid grid-cols-3 gap-3 text-center">
+                <div class="bg-white border-2 border-sky-100 p-3 rounded-2xl pastel-shadow">
+                    <span class="text-xs font-bold text-slate-400 block">Movimientos</span>
+                    <span id="statMoves" class="font-kids text-xl font-extrabold text-sky-600">0</span>
+                </div>
+                <div class="bg-white border-2 border-emerald-100 p-3 rounded-2xl pastel-shadow">
+                    <span class="text-xs font-bold text-slate-400 block">Parejas</span>
+                    <span id="statPairs" class="font-kids text-xl font-extrabold text-emerald-500">0 / 4</span>
+                </div>
+                <div class="bg-white border-2 border-amber-100 p-3 rounded-2xl pastel-shadow">
+                    <span class="text-xs font-bold text-slate-400 block">Categoría</span>
+                    <span id="statCategoryName" class="font-kids text-xs font-extrabold text-amber-600 mt-1 block">Saludos</span>
+                </div>
+            </div>
+
+            <!-- TABLERO DE MEMORIA -->
+            <div id="memoryGrid" class="grid grid-cols-2 sm:grid-cols-4 gap-3.5 perspective-1000 py-2">
+                <!-- Se insertan dinámicamente -->
+            </div>
+
+            <!-- RETROALIMENTACIÓN EN VIVO -->
+            <div class="p-4 bg-white border-2 border-sky-100 rounded-2xl flex items-center justify-between text-xs sm:text-sm font-bold text-slate-700 pastel-shadow">
+                <div class="flex items-center gap-3">
+                    <div class="p-2 bg-yellow-100 rounded-xl text-yellow-700">
+                        <i data-lucide="info" class="w-5 h-5"></i>
+                    </div>
+                    <span id="learningText">Voltea dos cartas para conectar el gesto visual con la técnica del movimiento.</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. PANTALLA: CONTINUAR HISTORIA (POST-ENTRENAMIENTO) -->
+        <section id="screenPostTraining" class="w-full hidden flex-col items-center text-center space-y-6 py-6">
+            <div class="bg-white border-2 border-emerald-200 rounded-3xl p-8 max-w-md w-full pastel-shadow space-y-4">
+                <div class="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto text-emerald-500 animate-bounce">
+                    <i data-lucide="check-circle-2" class="w-8 h-8"></i>
+                </div>
+                <h3 id="postTrainingTitle" class="font-kids text-2xl font-extrabold text-emerald-600">¡SEÑAS APRENDIDAS! 🎉</h3>
+                <p id="postTrainingDesc" class="text-xs sm:text-sm font-semibold text-slate-600">
+                    Lucas ya sabe usar estas señas. ¡Avanza en la historia para aplicarlas en la ciudad!
+                </p>
+                <button onclick="resumeStoryAfterTraining()" class="w-full py-3.5 bg-sky-400 hover:bg-sky-500 text-white font-kids font-bold text-lg rounded-2xl shadow-md transition btn-bounce">
+                    ¡CONTINUAR LA AVENTURA! 👉
+                </button>
+            </div>
+        </section>
+
+        <!-- 5. PANTALLA: PANTALLA FINAL (LOS 4 FINALES) -->
+        <section id="screenFinalEnding" class="w-full hidden flex-col items-center space-y-6 py-6">
+            <div class="bg-white border-2 border-amber-200 rounded-3xl p-6 sm:p-8 max-w-2xl w-full pastel-shadow text-center space-y-6">
+                
+                <div id="finalBadgeIcon" class="inline-flex px-4 py-1.5 rounded-full text-xs font-kids font-extrabold bg-amber-100 text-amber-800 border border-amber-300">
+                    🏆 Medalla de Aprendizaje
+                </div>
+
+                <h2 id="finalTitle" class="font-kids text-2xl sm:text-3xl font-extrabold text-sky-600">
+                    FINAL ALCANZADO
+                </h2>
+
+                <p id="finalDescription" class="text-xs sm:text-sm font-semibold text-slate-600 leading-relaxed px-2 sm:px-6">
+                    Descripción del final...
+                </p>
+
+                <!-- RESUMEN DE LOGROS -->
+                <div class="grid grid-cols-3 gap-3 bg-sky-50/70 p-4 rounded-2xl border border-sky-200">
+                    <div>
+                        <span class="text-[11px] font-bold text-slate-400 block">Capítulos</span>
+                        <span class="font-kids text-lg font-extrabold text-sky-600">5 / 5</span>
+                    </div>
+                    <div>
+                        <span class="text-[11px] font-bold text-slate-400 block">Módulos LSC</span>
+                        <span class="font-kids text-lg font-extrabold text-emerald-500">3 / 3</span>
+                    </div>
+                    <div>
+                        <span class="text-[11px] font-bold text-slate-400 block">Ruta Obtenida</span>
+                        <span id="resRouteName" class="font-kids text-xs font-extrabold text-amber-600 mt-1 block">Estación</span>
+                    </div>
+                </div>
+
+                <!-- COMPROMISO INCLUSIVO -->
+                <div class="text-left bg-emerald-50 p-4 rounded-2xl border border-emerald-200 space-y-2">
+                    <label class="block text-xs font-kids font-bold text-emerald-800 uppercase">
+                        ✍️ Mi compromiso con la Lengua de Señas Colombiana (LSC):
+                    </label>
+                    <textarea id="userCommitment" rows="2" class="w-full p-3 bg-white border border-emerald-300 rounded-xl text-xs font-semibold text-slate-700 focus:outline-none focus:border-emerald-500" placeholder="Escribe cómo incluirás la LSC en tu colegio o vida cotidiana..."></textarea>
+                    <button onclick="saveCommitment()" class="w-full py-2 bg-emerald-500 hover:bg-emerald-600 text-white font-kids font-bold text-xs rounded-xl transition">
+                        Guardar mi Registro de Aprendizaje ⭐
+                    </button>
+                    <p id="savedFeedback" class="hidden text-xs font-bold text-emerald-600 text-center">¡Compromiso guardado con éxito! 🌿</p>
+                </div>
+
+                <button onclick="restartGame()" class="py-3.5 px-8 bg-sky-400 hover:bg-sky-500 text-white font-kids font-extrabold text-base rounded-2xl shadow-md transition btn-bounce">
+                    VOLVER A JUGAR Y EXPLORAR OTRO FINAL 🔄
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- MODAL: DICCIONARIO COMPLETO LSC -->
+    <div id="labModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex justify-center items-center p-4">
+        <div class="bg-white border-2 border-sky-100 rounded-3xl max-w-2xl w-full max-h-[85vh] flex flex-col pastel-shadow overflow-hidden">
+            <div class="p-4 bg-sky-50 border-b border-sky-100 flex justify-between items-center">
+                <h3 class="font-kids text-lg font-bold text-sky-700 flex items-center gap-2">
+                    <i data-lucide="book-marked" class="w-5 h-5 text-sky-500"></i> Diccionario LSC Ilustrado (Ordenado)
+                </h3>
+                <button onclick="closeLabModal()" class="p-1 text-slate-400 hover:text-slate-600 rounded-full">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+            
+            <div id="labDictionaryList" class="p-4 overflow-y-auto space-y-3 flex-1 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <!-- Se puebla dinámicamente -->
+            </div>
+        </div>
+    </div>
+
+    <!-- CÓDIGO Y LÓGICA COMPLETA DEL JUEGO -->
+    <script>
+        /* ==========================================================================
+           2. BASE DE DATOS ESTRUCTURADA DE SEÑAS LSC POR MÓDULOS (CON IMÁGENES DEL PDF)
+           ========================================================================== */
+        const LSC_MODULES = {
+            saludos: [
+                {
+                    id: 'hola',
+                    name: 'Hola',
+                    desc: '👋 Mano abierta cerca de la frente moviéndose ligeramente hacia afuera con sonrisa amplia.',
+                    svg: `<img src="78526.jpg" alt="Seña HOLA LSC" class="w-full h-full object-cover rounded-xl" />`
+                },
+                {
+                    id: 'buenos_dias',
+                    name: 'Buenos Días',
+                    desc: '☀️ Mano plana tocando la barbilla/boca y luego desplazándose hacia adelante y abriéndose.',
+                    svg: `<img src="watermarked_img_18187613410725690653.jpg" alt="Buenos Días LSC" class="w-full h-full object-cover rounded-xl" />`
+                },
+                {
+                    id: 'buenas_tardes',
+                    name: 'Buenas Tardes',
+                    desc: '🌤️ Mano plana sobre el brazo opuesto a la altura del codo, realizando un movimiento descendente suave.',
+                    svg: `<img src="watermarked_img_5584250262237152603.jpg" alt="Buenas Tardes LSC" class="w-full h-full object-cover rounded-xl" />`
+                },
+                {
+                    id: 'buenas_noches',
+                    name: 'Buenas Noches',
+                    desc: '🌙 Mano plana que se desplaza frente al rostro de arriba hacia abajo, simulando el anochecer.',
+                    svg: `<img src="watermarked_img_16864873855761907718.jpg" alt="Buenas Noches LSC" class="w-full h-full object-cover rounded-xl" />`
+                }
+            ],
+            pronombres: [
+                {
+                    id: 'yo',
+                    name: 'Yo',
+                    desc: '👉 Dedo índice apuntando directamente al centro del propio pecho.',
+                    svg: `<img src="watermarked_img_15474526156208082670.jpg" alt="Yo LSC" class="w-full h-full object-cover rounded-xl" />`
+                },
+                {
+                    id: 'tu',
+                    name: 'Tú',
+                    desc: '👉 Dedo índice apuntando de forma directa a la persona con la que se interactúa.',
+                    svg: `<img src="watermarked_img_5584250262237152603.jpg" alt="Tú LSC" class="w-full h-full object-cover rounded-xl" />`
+                },
+                {
+                    id: 'el_ella',
+                    name: 'Él / Ella',
+                    desc: '👉 Dedo índice apuntando hacia un lado, señalando a una tercera persona en el espacio visual.',
+                    svg: `<img src="watermarked_img_5584250262237152603.jpg" alt="Él/Ella LSC" class="w-full h-full object-cover rounded-xl" />`
+                },
+                {
+                    id: 'nosotros',
+                    name: 'Nosotros',
+                    desc: '👥 Dedo índice apuntando al pecho y realizando un movimiento semicircular que envuelve al grupo.',
+                    svg: `<img src="watermarked_img_9738579664017263575.jpg" alt="Nosotros LSC" class="w-full h-full object-cover rounded-xl" />`
+                }
+            ],
+            cortesia: [
+                {
+                    id: 'por_favor',
+                    name: 'Por Favor',
+                    desc: '💫 Palma de la mano abierta apoyada suavemente sobre el pecho, realizando un movimiento circular.',
+                    svg: `<img src="watermarked_img_3604985755144696731.jpg" alt="Por Favor LSC" class="w-full h-full object-cover rounded-xl" />`
+                },
+                {
+                    id: 'gracias',
+                    name: 'Gracias',
+                    desc: '🙏 Yemas de los dedos de la mano dominante tocando la barbilla y extendiéndose hacia adelante.',
+                    svg: `<img src="watermarked_img_5584250262237152603.jpg" alt="Gracias LSC" class="w-full h-full object-cover rounded-xl" />`
+                },
+                {
+                    id: 'con_gusto',
+                    name: 'Con Gusto',
+                    desc: '😊 Mano abierta sobre el pecho dando unos ligeros toques con una sonrisa afable.',
+                    svg: `<img src="watermarked_img_3390010131042647387.jpg" alt="Con Gusto LSC" class="w-full h-full object-cover rounded-xl" />`
+                },
+                {
+                    id: 'perdon',
+                    name: 'Perdón / Disculpa',
+                    desc: '🤝 Mano suavemente cerrada o rozando la barbilla con postura facial de disculpa.',
+                    svg: `<img src="watermarked_img_3390010131042647387.jpg" alt="Perdón LSC" class="w-full h-full object-cover rounded-xl" />`
+                }
+            ]
+        };
+
+        /* ==========================================================================
+           3. HISTORIA DE 5 CAPÍTULOS CON 3 OPCIONES DE ELECCIÓN CADA UNO
+           ========================================================================== */
+        const STORY_CHAPTERS = {
+            1: {
+                title: "Capítulo 1: El Extravío en la Ciudad",
+                text: "Lucas (10 años) se distrae observando un colorido mural en el centro histórico y pierde de vista a su grupo escolar. Al verse solo, observa a una comerciante amable en un puesto de frutas. ¿Cómo debe iniciar la interacción?",
+                svg: LSC_MODULES.saludos[0].svg,
+                options: [
+                    {
+                        text: "A. Usar la seña 'HOLA' con una sonrisa amable y respetuosa.",
+                        nextAction: "TRAINING_1",
+                        route: "R1"
+                    },
+                    {
+                        text: "B. Gritar pidiendo ayuda a distancia sin usar lenguaje visual.",
+                        nextAction: "TRAINING_1",
+                        route: "R2"
+                    },
+                    {
+                        text: "C. Esperar en silencio a que alguien se acerque a adivinar lo sucedido.",
+                        nextAction: "TRAINING_1",
+                        route: "R3"
+                    }
+                ]
+            },
+            2: {
+                title: "Capítulo 2: Identificación en el Parque",
+                text: "La comerciante Sorda comprende su saludo y sonríe. Para explicarle que él es quien necesita orientación sobre la estación, Lucas debe identificarse adecuadamente. ¿Qué seña es correcta?",
+                svg: LSC_MODULES.pronombres[0].svg,
+                options: [
+                    {
+                        text: "A. Hacer la seña 'YO' apuntando a su pecho y señalar el mapa.",
+                        nextAction: "TRAINING_2",
+                        route: "R1"
+                    },
+                    {
+                        text: "B. Señalar a la comerciante usando 'TÚ' repetidamente sin explicarse.",
+                        nextAction: "TRAINING_2",
+                        route: "R2"
+                    },
+                    {
+                        text: "C. Señalar a un grupo lejano con 'ELLOS' confundiendo la situación.",
+                        nextAction: "TRAINING_2",
+                        route: "R4"
+                    }
+                ]
+            },
+            3: {
+                title: "Capítulo 3: Solicitud con Cortesía",
+                text: "La comerciante lo acompaña hasta la encrucijada del parque comunitario. Un joven deportista Sordo se acerca para apoyarlos. Lucas desea solicitar su orientación con máxima amabilidad. ¿Cómo se expresa?",
+                svg: LSC_MODULES.cortesia[0].svg,
+                options: [
+                    {
+                        text: "A. Realizar el gesto suave de 'POR FAVOR' sobre el pecho.",
+                        nextAction: "TRAINING_3",
+                        route: "R1"
+                    },
+                    {
+                        text: "B. Tocar bruscamente el hombro del deportista exigiendo respuesta.",
+                        nextAction: "TRAINING_3",
+                        route: "R3"
+                    },
+                    {
+                        text: "C. Hacer la seña de 'GRACIAS' antes de haber recibido la ayuda.",
+                        nextAction: "TRAINING_3",
+                        route: "R2"
+                    }
+                ]
+            },
+            4: {
+                title: "Capítulo 4: La Búsqueda del Transporte",
+                text: "Con el vocabulario aprendido (Saludos, Pronombres y Cortesía), Lucas y sus nuevos amigos llegan a la plaza central donde hay 3 vías para volver a casa. ¿Qué camino decide tomar Lucas?",
+                svg: LSC_MODULES.saludos[1].svg,
+                options: [
+                    {
+                        text: "Opción 1: Dirigirse a la Estación Central con la comerciante.",
+                        nextAction: "CHAPTER_5",
+                        route: "R1"
+                    },
+                    {
+                        text: "Opción 2: Seguir al grupo de jóvenes en el Parque Comunitario.",
+                        nextAction: "CHAPTER_5",
+                        route: "R2"
+                    },
+                    {
+                        text: "Opción 3: Entrar a la Biblioteca Cultural a buscar al intérprete.",
+                        nextAction: "CHAPTER_5",
+                        route: "R3"
+                    }
+                ]
+            },
+            5: {
+                title: "Capítulo 5: El Retorno a Casa (Clímax)",
+                text: "¡Lucas ha demostrado una increíble empatía y habilidad comunicativa en LSC! Los vecinos Sordos celebran su esfuerzo e inclusión. ¿Cuál es la acción final de Lucas?",
+                svg: LSC_MODULES.cortesia[1].svg,
+                options: [
+                    {
+                        text: "A. Decir 'GRACIAS' en LSC a todos los que lo ayudaron en la Estación.",
+                        nextAction: "FINAL_END",
+                        route: "R1"
+                    },
+                    {
+                        text: "B. Hacer la seña de 'NOSOTROS' para celebrar la amistad en el Parque.",
+                        nextAction: "FINAL_END",
+                        route: "R2"
+                    },
+                    {
+                        text: "C. Demostrar total autonomía visual e integración en la Biblioteca.",
+                        nextAction: "FINAL_END",
+                        route: "R3"
+                    }
+                ]
+            }
+        };
+
+        /* LOS 4 FINALES ALTERNATIVOS */
+        const FINAL_ENDINGS = {
+            R1: {
+                title: "FINAL 1: RUTA DE LA ESTACIÓN CENTRAL 🚆",
+                badge: "Ruta de la Líder Sorda 🎖️",
+                desc: "Lucas saludó con amabilidad en la Estación Central. La líder Sorda lo acompañó directamente hasta el transporte escolar. ¡Lucas aprendió que la LSC construye puentes de empatía!"
+            },
+            R2: {
+                title: "FINAL 2: RUTA DEL PARQUE COMUNITARIO 🌳",
+                badge: "Red de Amigos Inclusivos ⭐",
+                desc: "Lucas compartió con los jóvenes del parque. Usando pronombres y cortesía, formó un nuevo grupo de amigos Sordos que lo acompañaron felices a casa."
+            },
+            R3: {
+                title: "FINAL 3: RUTA DE LA BIBLIOTECA CULTURAL 📚",
+                badge: "Encuentro Cultural 🏛️",
+                desc: "En la biblioteca, un intérprete de LSC facilitó el reencuentro con su familia. Lucas aprovechó para aprender más señas en los libros ilustrados."
+            },
+            R4: {
+                title: "FINAL 4: RUTA DEL EXPLORADOR AUTÓNOMO 🧭",
+                badge: "Maestro del Lenguaje Visual 🏆",
+                desc: "Lucas aplicó de manera independiente las señas de ubicación y cortesía, guiándose por la ciudad con total autonomía visual y regresando a salvo."
+            }
+        };
+
+        /* ==========================================================================
+           4. ESTADO DEL JUEGO
+           ========================================================================== */
+        let state = {
+            currentChapter: 1,
+            currentModuleKey: 'saludos',
+            selectedRoute: 'R1',
+            memoryCards: [],
+            flipped: [],
+            moves: 0,
+            matchedPairs: 0,
+            isMuted: false
+        };
+
+        function showScreen(screenId) {
+            const screens = ['screenIntro', 'screenChapter', 'screenTraining', 'screenPostTraining', 'screenFinalEnding'];
+            screens.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    if (id === screenId) {
+                        el.classList.remove('hidden');
+                        el.classList.add('flex');
+                    } else {
+                        el.classList.add('hidden');
+                        el.classList.remove('flex');
+                    }
+                }
+            });
+        }
+
+        function updateProgressBar(percent, label) {
+            document.getElementById('progressBarFill').style.width = `${percent}%`;
+            document.getElementById('progressStepLabel').textContent = label;
+        }
+
+        /* INICIAR CAPÍTULOS NARRATIVOS */
+        function startChapter(num) {
+            state.currentChapter = num;
+            const chapData = STORY_CHAPTERS[num];
+
+            showScreen('screenChapter');
+            updateProgressBar(num * 18, `Capítulo ${num} de 5`);
+
+            document.getElementById('chapBadge').textContent = `Capítulo ${num} de 5`;
+            document.getElementById('chapTitle').textContent = chapData.title;
+            document.getElementById('chapStoryText').textContent = chapData.text;
+            document.getElementById('chapImageSVG').innerHTML = chapData.svg;
+
+            const container = document.getElementById('chapOptionsContainer');
+            container.innerHTML = '';
+
+            chapData.options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = 'w-full p-3.5 bg-sky-50 border-2 border-sky-100 hover:border-sky-300 rounded-2xl text-xs sm:text-sm font-bold text-left text-slate-700 transition flex items-center justify-between shadow-sm btn-bounce';
+                btn.innerHTML = `<span>${opt.text}</span> <i data-lucide="arrow-right" class="w-4 h-4 text-sky-500"></i>`;
+                
+                btn.onclick = () => {
+                    if (opt.route) state.selectedRoute = opt.route;
+
+                    if (opt.nextAction === "TRAINING_1") {
+                        startTrainingModule('saludos', 'Módulo 1: Saludos Básicos', 2);
+                    } else if (opt.nextAction === "TRAINING_2") {
+                        startTrainingModule('pronombres', 'Módulo 2: Pronombres Personales', 3);
+                    } else if (opt.nextAction === "TRAINING_3") {
+                        startTrainingModule('cortesia', 'Módulo 3: Fórmulas de Cortesía', 4);
+                    } else if (opt.nextAction === "CHAPTER_5") {
+                        startChapter(5);
+                    } else if (opt.nextAction === "FINAL_END") {
+                        showFinalEndingScreen();
+                    }
+                };
+                container.appendChild(btn);
+            });
+
+            lucide.createIcons();
+        }
+
+        /* INICIAR MÓDULO DE ENTRENAMIENTO DE CARTAS INTERCALADO */
+        function startTrainingModule(moduleKey, titleText, nextChapNum) {
+            state.currentModuleKey = moduleKey;
+            state.nextChapterAfterTraining = nextChapNum;
+
+            showScreen('screenTraining');
+            updateProgressBar(nextChapNum * 18 - 5, `Entrenamiento: ${moduleKey.toUpperCase()}`);
+
+            document.getElementById('trainingModuleTitle').innerHTML = `<i data-lucide="sparkles" class="w-5 h-5 text-yellow-500"></i> Mini-Juego: ${titleText}`;
+            document.getElementById('statCategoryName').textContent = moduleKey.toUpperCase();
+
+            const items = LSC_MODULES[moduleKey];
+            let deck = [];
+
+            items.forEach(item => {
+                deck.push({ pairId: item.id, type: 'photo', svg: item.svg, name: item.name, desc: item.desc });
+                deck.push({ pairId: item.id, type: 'desc', desc: item.desc, name: item.name, svg: item.svg });
+            });
+
+            deck.sort(() => Math.random() - 0.5);
+            state.memoryCards = deck;
+            state.flipped = [];
+            state.moves = 0;
+            state.matchedPairs = 0;
+
+            document.getElementById('statMoves').textContent = '0';
+            document.getElementById('statPairs').textContent = `0 / ${items.length}`;
+
+            renderMemoryGrid();
+        }
+
+        function renderMemoryGrid() {
+            const grid = document.getElementById('memoryGrid');
+            grid.innerHTML = '';
+
+            state.memoryCards.forEach((card, idx) => {
+                const cardWrapper = document.createElement('div');
+                cardWrapper.className = 'h-36 sm:h-40 rounded-2xl cursor-pointer perspective-1000';
+                cardWrapper.onclick = () => onCardClick(idx);
+
+                const inner = document.createElement('div');
+                inner.id = `card-inner-${idx}`;
+                inner.className = 'w-full h-full duration-500 transform-style-3d relative rounded-2xl border-2 border-sky-100 bg-white pastel-shadow';
+
+                // Frente
+                const front = document.createElement('div');
+                front.className = 'absolute inset-0 backface-hidden bg-sky-50/70 rounded-2xl flex flex-col items-center justify-center p-2 border border-sky-100 hover:border-sky-300 transition';
+                front.innerHTML = `
+                    <div class="w-10 h-10 rounded-xl bg-amber-200 flex items-center justify-center font-kids font-extrabold text-amber-800 text-lg">
+                        ?
+                    </div>
+                    <span class="text-[9px] font-kids font-bold text-sky-600 mt-2">¿FOTO O MOVIMIENTO?</span>
+                `;
+
+                // Reverso
+                const back = document.createElement('div');
+                back.className = 'absolute inset-0 backface-hidden rotate-y-180 bg-white rounded-2xl border-2 border-sky-400 flex flex-col items-center justify-center p-2 text-center overflow-hidden';
+
+                if (card.type === 'photo') {
+                    back.innerHTML = `<div class="w-full h-full rounded-xl overflow-hidden bg-slate-50">${card.svg}</div>`;
+                } else {
+                    back.innerHTML = `
+                        <div class="p-2 flex flex-col items-center justify-center h-full">
+                            <span class="text-[9px] font-kids font-bold text-pink-500 uppercase mb-1">🖐️ Técnica LSC</span>
+                            <span class="text-[11px] font-bold text-slate-800 leading-tight">${card.desc}</span>
+                        </div>
+                    `;
+                }
+
+                inner.appendChild(front);
+                inner.appendChild(back);
+                cardWrapper.appendChild(inner);
+                grid.appendChild(cardWrapper);
+            });
+        }
+
+        function onCardClick(idx) {
+            if (state.flipped.length === 2) return;
+            const inner = document.getElementById(`card-inner-${idx}`);
+            if (inner.classList.contains('rotate-y-180') || inner.classList.contains('matched')) return;
+
+            inner.classList.add('rotate-y-180');
+            state.flipped.push({ idx, card: state.memoryCards[idx] });
+
+            if (state.flipped.length === 2) {
+                state.moves++;
+                document.getElementById('statMoves').textContent = state.moves;
+                checkMatch();
+            }
+        }
+
+        function checkMatch() {
+            const [c1, c2] = state.flipped;
+            const isMatch = c1.card.pairId === c2.card.pairId && c1.card.type !== c2.card.type;
+
+            if (isMatch) {
+                const el1 = document.getElementById(`card-inner-${c1.idx}`);
+                const el2 = document.getElementById(`card-inner-${c2.idx}`);
+                el1.classList.add('matched', 'border-emerald-400');
+                el2.classList.add('matched', 'border-emerald-400');
+
+                state.matchedPairs++;
+                const itemsCount = LSC_MODULES[state.currentModuleKey].length;
+                document.getElementById('statPairs').textContent = `${state.matchedPairs} / ${itemsCount}`;
+                document.getElementById('learningText').textContent = `¡Correcto! Aprendiste la seña: ${c1.card.name}`;
+
+                state.flipped = [];
+
+                if (state.matchedPairs === itemsCount) {
+                    setTimeout(() => {
+                        showScreen('screenPostTraining');
+                        document.getElementById('postTrainingTitle').textContent = `¡COMPLETADO: ${state.currentModuleKey.toUpperCase()}! 🎉`;
+                        document.getElementById('postTrainingDesc').textContent = `Lucas ya domina estas señas. ¡Sigamos adelante con su travesía en la ciudad!`;
+                    }, 800);
+                }
+            } else {
+                setTimeout(() => {
+                    const el1 = document.getElementById(`card-inner-${c1.idx}`);
+                    const el2 = document.getElementById(`card-inner-${c2.idx}`);
+                    if (el1) el1.classList.remove('rotate-y-180');
+                    if (el2) el2.classList.remove('rotate-y-180');
+                    state.flipped = [];
+                }, 1000);
+            }
+        }
+
+        function resumeStoryAfterTraining() {
+            startChapter(state.nextChapterAfterTraining);
+        }
+
+        function showFinalEndingScreen() {
+            const ending = FINAL_ENDINGS[state.selectedRoute] || FINAL_ENDINGS.R1;
+
+            showScreen('screenFinalEnding');
+            updateProgressBar(100, "¡Historia Completada!");
+
+            document.getElementById('finalBadgeIcon').textContent = ending.badge;
+            document.getElementById('finalTitle').textContent = ending.title;
+            document.getElementById('finalDescription').textContent = ending.desc;
+            document.getElementById('resRouteName').textContent = state.selectedRoute;
+        }
+
+        function saveCommitment() {
+            const text = document.getElementById('userCommitment').value;
+            if (text.trim().length > 0) {
+                document.getElementById('savedFeedback').classList.remove('hidden');
+            }
+        }
+
+        function restartGame() {
+            showScreen('screenIntro');
+            updateProgressBar(10, "Progreso: Inicio");
+        }
+
+        function toggleAudio() {
+            state.isMuted = !state.isMuted;
+            const btn = document.getElementById('btnAudio');
+            btn.innerHTML = state.isMuted ? `<i data-lucide="volume-x" class="w-5 h-5"></i>` : `<i data-lucide="volume-2" class="w-5 h-5"></i>`;
+            lucide.createIcons();
+        }
+
+        function openLabModal() {
+            const list = document.getElementById('labDictionaryList');
+            list.innerHTML = '';
+
+            ['saludos', 'pronombres', 'cortesia'].forEach(key => {
+                LSC_MODULES[key].forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = 'p-3 bg-sky-50/70 border border-sky-100 rounded-2xl flex items-center gap-3';
+                    card.innerHTML = `
+                        <div class="w-16 h-16 rounded-xl overflow-hidden bg-white border border-sky-200 flex-shrink-0">
+                            ${item.svg}
+                        </div>
+                        <div>
+                            <span class="text-xs font-kids font-extrabold text-sky-600 block">${item.name}</span>
+                            <p class="text-[11px] font-semibold text-slate-600 leading-tight mt-0.5">${item.desc}</p>
+                        </div>
+                    `;
+                    list.appendChild(card);
+                });
+            });
+
+            document.getElementById('labModal').classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        function closeLabModal() {
+            document.getElementById('labModal').classList.add('hidden');
+        }
+
+        window.onload = function() {
+            lucide.createIcons();
+        }
+    </script>
+</body>
+</html>
